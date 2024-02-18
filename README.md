@@ -6,7 +6,7 @@ Installation
 ------------
 
 ```bash 
-$ npm install @koodu-platform/resonance
+$ npm install resonance
 ```
 ## Usage
 -----
