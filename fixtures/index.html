@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grid Sound Player</title>
+    <style>
+        .grid-container {
+            display: flex;
+            flex-wrap: wrap;
+            width: 300px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .grid-item {
+            flex: 1 0 30%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .grid-item:hover {
+            background-color: #f0f0f0;
+        }
+
+        .active {
+            animation: highlight 0.5s infinite alternate;
+        }
+
+        @keyframes highlight {
+            from { background-color: #fff; }
+            to { background-color: #f0f0f0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="grid-container">
+        <div class="grid-item" data-sound="cardinal.mp3">Sound 1</div>
+        <div class="grid-item" data-sound="mountain.mp3">Sound 2</div>
+        <div class="grid-item" data-sound="notification.mp3">Sound 3</div>
+        <div class="grid-item" data-sound="shotgun.mp3">Sound 4</div>
+        <div class="grid-item" data-sound="thunder.mp3">Sound 5</div>
+        <div class="grid-item" data-sound="whoosh.mp3">Sound 6</div>
+    </div>
+
+    <script src="../src/lib/resonance.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const resonance = window.resonance;
+
+            // Initialize Resonance
+            const audioPlayers = {};
+            let activeAudioPlayer;
+
+            // Event listener for arrow key presses
+            document.addEventListener('keydown', (event) => {
+                const keyCode = event.keyCode;
+                const arrowKeys = { up: 38, down: 40 , left: 37, right: 39};
+
+                if (keyCode === arrowKeys.up || keyCode === arrowKeys.down || keyCode === arrowKeys.left || keyCode === arrowKeys.right) {
+                    event.preventDefault(); // Prevent default arrow key behavior (scrolling)
+
+                    // Find the currently active grid item
+                    const activeItem = document.querySelector('.grid-item.active');
+                    let nextItem;
+
+                    if (activeItem) {
+                        // Find the next grid item based on arrow key direction
+                        nextItem = keyCode === arrowKeys.up ? activeItem.previousElementSibling : activeItem.nextElementSibling;
+                    } else {
+                        // If no item is active, select the first item
+                        nextItem = document.querySelector('.grid-item');
+                    }
+
+                    if (nextItem) {
+                        // Play the sound associated with the next grid item
+                        const soundPath = nextItem.getAttribute('data-sound');
+                        const audioPlayer = audioPlayers[soundPath] || new resonance.sound({
+                            baseURL: './fixtures/assets/',
+                            audioPaths: soundPath,
+                        });
+
+                        // Check if a sound is currently playing
+                        if (activeAudioPlayer && activeAudioPlayer !== audioPlayer) {
+                            activeAudioPlayer.stop();
+                        }
+
+                        audioPlayer.play();
+                        activeAudioPlayer = audioPlayer;
+
+                        // Highlight the next grid item
+                        if (activeItem) {
+                            activeItem.classList.remove('active');
+                        }
+                        nextItem.classList.add('active');
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

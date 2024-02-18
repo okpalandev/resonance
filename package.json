@@ -1,0 +1,21 @@
+{
+  "name": "@koodu-platform/resonance",
+  "version": "0.0.1",
+  "description": "Simple DOM Event Driven Sound Abstraction Library",
+  "main": "src/index.js",
+  "private": false,
+  "module": "src/lib/resonance.js",
+  "scripts": {
+    "test": "echo See 'fixtures' directory"
+  },
+  "keywords": [
+    "sound",
+    "resonance",
+    "sound-player",
+    "noise",
+    "sound-library",
+    "event-driven"
+  ],
+  "author": "Nnamdi Michael Okpala",
+  "license": "see LICENSE file"
+}
